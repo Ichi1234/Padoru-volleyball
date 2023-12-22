@@ -3,11 +3,18 @@ from character import Player_1, Player_2
 from ball import Ball
 import threading
 
-# def collision(player):
-#     if pygame.sprite.spritecollide(player.sprite, ball, False):
-#
-#         return True
-#     return False
+def create_hitbox(object_rect):
+    object_middle = pygame.Rect.copy(object_rect.rect)
+    pygame.Rect.scale_by_ip(object_middle, 0.5, 0)
+
+    object_left = pygame.Rect.copy(object_middle)
+    pygame.Rect.move_ip(object_left, (-100, 0))
+
+    object_right = pygame.Rect.copy(object_middle)
+    pygame.Rect.move_ip(object_right, (100, 0))
+
+    return object_middle, object_left, object_right
+
 
 ###TODO Make game scale with user resolution (move, spawn) How to do? IDK!!!
 GAME_BACKGROUND = "bg/Background.png"
@@ -85,6 +92,19 @@ while running:
     # ball.draw(screen)
     ball.update(player_1.rect, player_2.rect, net_rect)
 
+
+    player_1_middle, player_1_left, player_1_right = create_hitbox(player_1)
+
+    ###TODO delete test hitbox
+    image_test = pygame.Surface((0, 0))
+    test = pygame.draw.rect(screen, "green", player_1.rect)
+    testmove = pygame.draw.rect(screen, "black", player_1_middle)
+    testmove2 = pygame.draw.rect(screen, "black", player_1_left)
+    testmove3 = pygame.draw.rect(screen, "black", player_1_right)
+    test2 = pygame.draw.rect(screen, "green", player_2.rect)
+    test3 = pygame.draw.rect(screen, "green", ball.rect)
+    screen.blit(image_test, test)
+    screen.blit(image_test, testmove)
 
 
     pygame.display.update()

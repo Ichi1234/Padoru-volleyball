@@ -41,33 +41,31 @@ class Ball:
         # if ball collide with object it will bounce
         if rect_of_object and self.rect.colliderect(rect_of_object):
 
-
-            if self.rect.right == rect_of_object.left and self.positive_x_force():
-                self.force_x += 15
+            if self.rect.right == rect_of_object.left:
+                if self.positive_x_force():
+                    self.force_x += 15
+                else:
+                    self.force_x -= 15
                 self.bounce = False
 
-            elif self.rect.right == rect_of_object.left and not self.positive_x_force():
-                self.force_x -= 15
+            elif self.rect.left == rect_of_object.right:
+                if self.positive_x_force():
+                    self.force_x += 15
+                else:
+                    self.force_x -= 15
                 self.bounce = False
 
-            elif self.rect.left == rect_of_object.right and self.positive_x_force():
-                self.force_x += 15
-                self.bounce = False
-
-            elif self.rect.left == rect_of_object.right and not self.positive_x_force():
-                self.force_x -= 15
-                self.bounce = False
-
+                # Check bottom collision
             elif self.rect.bottom >= rect_of_object.top:
                 self.force_x = 0
                 self.bounce = True
 
+            self.force_x *= -1
 
 
 
     def newton_third_law(self, collide_player1, collide_player2, net):
         self.rect.x += self.force_x ###TODO remove this when make hit
-
         #bounce left and right screen
         if self.rect.right >= 1300 or self.rect.left <= 50:
             self.force_x *= -1
@@ -81,7 +79,7 @@ class Ball:
         if net and self.rect.colliderect(net):
             self.force_x *= -1
 
-        self.force_x *= -1
+
 
     def update(self, collide_player1, collide_player2, net):
         self.gravity()
